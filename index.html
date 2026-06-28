@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>智能刷题网站</title>
+  <style>
+    :root {
+      --bg-a: #e8f4ff;
+      --bg-b: #f7fbff;
+      --panel: rgba(255, 255, 255, 0.78);
+      --panel-strong: rgba(255, 255, 255, 0.94);
+      --text: #172033;
+      --muted: #687386;
+      --line: rgba(84, 112, 143, 0.18);
+      --brand: #2563eb;
+      --brand-soft: #dbeafe;
+      --good: #16a34a;
+      --good-bg: #dcfce7;
+      --bad: #dc2626;
+      --bad-bg: #fee2e2;
+      --warn: #d97706;
+      --shadow: 0 20px 60px rgba(37, 99, 235, 0.13);
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 5%, rgba(34, 197, 94, 0.12), transparent 28rem),
+        radial-gradient(circle at 85% 0%, rgba(37, 99, 235, 0.18), transparent 30rem),
+        linear-gradient(145deg, var(--bg-a), var(--bg-b) 52%, #eef7f4);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 34px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(135deg, #2563eb, #14b8a6);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .subline {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .topstats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .stat {
+      min-width: 92px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 326px;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .main {
+      overflow: hidden;
+    }
+
+    .modebar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modebar button,
+    .navrow button,
+    .wrong-actions button,
+    .answer-actions button {
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+    }
+
+    .modebar button.active {
+      color: #fff;
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    .question-wrap {
+      padding: 24px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .question {
+      margin: 0 0 22px;
+      font-size: 22px;
+      line-height: 1.62;
+      letter-spacing: 0;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      background: var(--panel-strong);
+      text-align: left;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: rgba(37, 99, 235, 0.35);
+    }
+
+    .option .label {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--brand);
+      background: var(--brand-soft);
+      font-weight: 800;
+    }
+
+    .option.correct {
+      border-color: rgba(22, 163, 74, 0.45);
+      background: var(--good-bg);
+    }
+
+    .option.correct .label {
+      color: #fff;
+      background: var(--good);
+    }
+
+    .option.wrong {
+      border-color: rgba(220, 38, 38, 0.45);
+      background: var(--bad-bg);
+    }
+
+    .option.wrong .label {
+      color: #fff;
+      background: var(--bad);
+    }
+
+    .option.dimmed {
+      opacity: 0.62;
+    }
+
+    .written {
+      display: grid;
+      gap: 12px;
+    }
+
+    .written textarea,
+    .written input {
+      width: 100%;
+      min-height: 96px;
+      padding: 12px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--text);
+    }
+
+    .written input {
+      min-height: 44px;
+    }
+
+    .answer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .answer-actions .primary,
+    .navrow .primary,
+    .wrong-actions .primary {
+      color: #fff;
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    .answer-actions .good {
+      color: #fff;
+      background: var(--good);
+      border-color: transparent;
+    }
+
+    .answer-actions .bad,
+    .wrong-actions .danger {
+      color: #fff;
+      background: var(--bad);
+      border-color: transparent;
+    }
+
+    .explanation {
+      display: none;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 8px;
+      background: rgba(239, 246, 255, 0.92);
+      line-height: 1.72;
+    }
+
+    .explanation.show {
+      display: block;
+    }
+
+    .explanation h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .navrow {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 24px 24px;
+    }
+
+    .side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-section {
+      padding: 14px;
+    }
+
+    .side-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .side-title h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      margin-right: 4px;
+      vertical-align: -1px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 7px;
+      max-height: 330px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .card-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .card-cell.done {
+      color: #166534;
+      background: var(--good-bg);
+      border-color: rgba(22, 163, 74, 0.28);
+    }
+
+    .card-cell.bad {
+      color: #991b1b;
+      background: var(--bad-bg);
+      border-color: rgba(220, 38, 38, 0.28);
+    }
+
+    .card-cell.current {
+      color: #fff;
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    .wrong-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .wrong-list {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+    }
+
+    .wrong-item {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+      text-align: left;
+      line-height: 1.45;
+    }
+
+    .empty {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 20;
+      transform: translateX(-50%) translateY(20px);
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(23, 32, 51, 0.88);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .topstats {
+        justify-content: stretch;
+      }
+
+      .stat {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .side {
+        order: 2;
+      }
+
+      .question-wrap,
+      .navrow {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .question {
+        font-size: 19px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        width: min(100% - 18px, 1180px);
+        padding-top: 9px;
+      }
+
+      .topbar {
+        top: 8px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .stat strong {
+        font-size: 15px;
+      }
+
+      .modebar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .modebar button:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .option {
+        grid-template-columns: 36px 1fr;
+        padding: 11px;
+      }
+
+      .option .label {
+        width: 30px;
+        height: 30px;
+      }
+
+      .card-grid {
+        grid-template-columns: repeat(8, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">练</div>
+        <div>
+          <h1>智能刷题</h1>
+          <div class="subline" id="modeText">顺序练习</div>
+        </div>
+      </div>
+      <div class="topstats">
+        <div class="stat"><strong id="progressText">第 1 / 98</strong><span>当前进度</span></div>
+        <div class="stat"><strong id="accuracyText">0%</strong><span>正确率</span></div>
+        <div class="stat"><strong id="wrongCountText">0</strong><span>错题数</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main class="panel main">
+        <div class="modebar" id="modebar">
+          <button data-mode="order" class="active">顺序练习</button>
+          <button data-mode="random">随机练习</button>
+          <button data-mode="wrong">错题练习</button>
+          <button id="resetProgressBtn" title="清空所有本地做题记录">重置记录</button>
+        </div>
+
+        <section class="question-wrap" id="questionArea"></section>
+
+        <div class="navrow">
+          <button id="prevBtn">上一题</button>
+          <button id="shuffleBtn">重新随机</button>
+          <button id="nextBtn" class="primary">下一题</button>
+        </div>
+      </main>
+
+      <aside class="side">
+        <section class="panel side-section">
+          <div class="side-title">
+            <h2>答题卡</h2>
+            <span class="pill" id="answeredText">已答 0</span>
+          </div>
+          <div class="legend">
+            <span><i style="background:#fff;border:1px solid var(--line)"></i>未答</span>
+            <span><i style="background:var(--good-bg)"></i>已答</span>
+            <span><i style="background:var(--bad-bg)"></i>错题</span>
+            <span><i style="background:var(--brand)"></i>当前</span>
+          </div>
+          <div class="card-grid" id="answerCard"></div>
+        </section>
+
+        <section class="panel side-section">
+          <div class="side-title">
+            <h2>错题集</h2>
+            <span class="pill" id="wrongBookCount">0 题</span>
+          </div>
+          <div class="wrong-actions">
+            <button id="startWrongBtn" class="primary">刷错题</button>
+            <button id="clearWrongBtn" class="danger">清空错题</button>
+          </div>
+          <div class="wrong-list" id="wrongList"></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const QUESTION_BANK = [
+      {"id":1,"type":"单选题","question":"智能控制相比传统控制的优势是？","options":["A. 只能处理线性系统","B. 能处理复杂非线性系统","C. 不需要数据","D. 能自主学习"],"answer":"B","explanation":"暂无解析"},
+      {"id":2,"type":"单选题","question":"智能传感器的关键技术不包括？","options":["A. 芯片技术","B. 网络技术","C. 发电技术","D. 数据处理技术"],"answer":"C","explanation":"暂无解析"},
+      {"id":3,"type":"单选题","question":"以下哪项不属于AI与网络融合的关键技术？","options":["A. 业务预测","B. 网络切片","C. 脑机接口","D. 资源分配共享"],"answer":"C","explanation":"暂无解析"},
+      {"id":4,"type":"判断题","question":"类脑芯片采用冯·诺依曼架构，计算和存储分离。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":5,"type":"单选题","question":"以下哪项是混合增强智能的典型应用？","options":["A. 全自动无人工厂","B. 医生+AI辅助诊断系统","C. 仅使用人脸识别的门禁","D. 数据仓库"],"answer":"B","explanation":"暂无解析"},
+      {"id":6,"type":"单选题","question":"关于ACP方法，下列说法正确的是？","options":["A. 直接用真实系统做实验","B. 先构建人工系统进行计算实验","C. 不需要人工参与","D. 只能用于交通领域"],"answer":"B","explanation":"暂无解析"},
+      {"id":7,"type":"简答题","question":"假设你是一家三甲医院的人工智能产品经理，团队开发了一套“混合增强智能”辅助诊疗系统，能快速分析医学影像并给出疑似病变区域，但最终诊断仍需医生确认并签字。请思考并回答：（1）这种“人在回路”的设计可能带来哪些好处？（2）可能引发哪些新问题？","options":[],"answer":"好处：结合AI效率与医生专业判断，降低误诊风险，提高诊疗效率和可解释性，便于责任追踪并满足伦理监管要求。问题：可能出现责任归属不清、医生过度依赖AI、算法偏见、隐私安全、系统故障和诊疗流程成本上升等问题。","explanation":"暂无解析"},
+      {"id":8,"type":"单选题","question":"人工智能与集成电路融合的主要方向是？","options":["A. 提高芯片面积","B. 设计专用AI芯片","C. 减少晶体管数量","D. 提升功耗"],"answer":"B","explanation":"暂无解析"},
+      {"id":9,"type":"判断题","question":"强化学习的核心是通过奖励信号引导智能体行为。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":10,"type":"单选题","question":"跨媒体智能的核心目标是？","options":["A. 处理单一类型数据","B. 融合多种感知通道（如视、听、语言）","C. 提高数据存储效率","D. 替代人类判断"],"answer":"B","explanation":"暂无解析"},
+      {"id":11,"type":"单选题","question":"知识图谱本质上是一种？","options":["A. 线性回归模型","B. 语义网络","C. 聚类算法","D. 生成模型"],"answer":"B","explanation":"暂无解析"},
+      {"id":12,"type":"单选题","question":"群体智能的典型自然例子是？","options":["A. 蚂蚁觅食","B. 狼群捕猎","C. 蜜蜂筑巢","D. 以上都是"],"answer":"D","explanation":"暂无解析"},
+      {"id":13,"type":"单选题","question":"联邦学习的核心优势是？","options":["A. 数据集中训练","B. 数据不出本地，模型参数交换","C. 提高数据存储能力","D. 完全公开数据"],"answer":"B","explanation":"暂无解析"},
+      {"id":14,"type":"简答题","question":"阅读教材P189-192页，回答如下问题：联邦学习被称作“数据不动模型动”，在保护隐私的同时实现联合建模。请从金融、医疗、智能家居中任选一个场景，设想联邦学习可能遇到的一个应用困难或伦理挑战。","options":[],"answer":"示例：医疗场景中，多家医院可联合训练疾病诊断模型，但可能遇到数据分布差异大、模型效果不稳定、通信成本高、模型参数泄露隐私、患者授权和责任划分不清等困难或伦理挑战。","explanation":"暂无解析"},
+      {"id":15,"type":"单选题","question":"混合增强智能的核心思想是？","options":["A. 完全替代人类智能","B. 人类与机器智能互补协同","C. 只使用机器智能","D. 只使用人类智能"],"answer":"B","explanation":"暂无解析"},
+      {"id":16,"type":"单选题","question":"平行控制与管理的理论核心是基于？","options":["A. ACP方法","B. PID控制","C. 模糊逻辑","D. 贝叶斯网络"],"answer":"A","explanation":"暂无解析"},
+      {"id":17,"type":"判断题","question":"深度学习模型只能处理结构化数据，不能处理图像。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":18,"type":"单选题","question":"迁移学习的核心目的是？","options":["A. 从零开始训练模型","B. 提高模型参数量","C. 利用已有知识加速新任务学习","D. 减少模型层数"],"answer":"C","explanation":"暂无解析"},
+      {"id":19,"type":"判断题","question":"迁移学习可以在数据量极少的情况下提升模型性能。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":20,"type":"单选题","question":"强化学习中，智能体与环境交互的目的是？","options":["A. 最小化动作次数","B. 最大化累计奖励","C. 最小化状态变化","D. 最大化环境干扰"],"answer":"B","explanation":"暂无解析"},
+      {"id":21,"type":"判断题","question":"态势感知技术只能在安全事件发生后使用。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":22,"type":"单选题","question":"人工智能2.0的三大变革不包括以下哪一项？","options":["A. 强化系统建模与数据分析能力","B. 强化认知与学习能力","C. 强化硬件制造能力","D. 强化人机交互的协作能力"],"answer":"C","explanation":"暂无解析"},
+      {"id":23,"type":"判断题","question":"人工智能2.0强调从“授之以鱼”转向“授之以渔”。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":24,"type":"单选题","question":"以下哪种模型最适合处理时间序列数据？","options":["A. 卷积神经网络（CNN）","B. 循环神经网络（RNN）","C. 全连接网络","D. 生成对抗网络（GAN）"],"answer":"B","explanation":"暂无解析"},
+      {"id":25,"type":"填空题","question":"以下案例可采用哪种数据挖掘方法？1. 银行想知道哪些客户未来3个月可能贷款违约；2. 电商平台想把用户分成不同消费习惯的群体，做差异化营销；3. 超市分析发现“买啤酒的顾客有70%也会买尿布”；4. 根据过去5年每月销量，预测下季度销售额。","options":[],"answer":"分类；聚类；关联；预测","explanation":"暂无解析"},
+      {"id":26,"type":"单选题","question":"以下哪项不属于网络信息安全技术的三大要素？","options":["A. 安全资产","B. 安全威胁","C. 安全服务","D. 安全措施"],"answer":"C","explanation":"暂无解析"},
+      {"id":27,"type":"判断题","question":"零信任安全模型假设网络内部是安全的，不需要持续验证。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":28,"type":"单选题","question":"以下哪项属于响应修复技术？","options":["A. 渗透测试","B. 漏洞挖掘","C. SOAR","D. 态势感知"],"answer":"C","explanation":"暂无解析"},
+      {"id":29,"type":"填空题","question":"以下场景适用于哪种计算模式？1. 每月底统计全公司销售报表，需要处理几十亿条历史订单；2. 智能工厂输送带速度异常时，必须在50毫秒内发出停机指令；3. 根据微信好友关系，推荐你可能认识的人。","options":[],"answer":"批处理；流处理；图处理","explanation":"暂无解析"},
+      {"id":30,"type":"判断题","question":"批处理计算适合实时监控场景。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":31,"type":"单选题","question":"以下哪个是开源的大数据批处理框架？","options":["A. Flink","B. Storm","C. Hadoop","D. IIS"],"answer":"C","explanation":"暂无解析"},
+      {"id":32,"type":"单选题","question":"适合处理全量静态数据的大数据计算模式是？","options":["A. 流处理","B. 批处理","C. 图计算","D. 内存计算"],"answer":"B","explanation":"暂无解析"},
+      {"id":33,"type":"单选题","question":"根据材料，系统日志采集的主要作用不包括以下哪一项？","options":["A. 记录硬件、软件和系统问题信息","B. 监视系统中发生的事件","C. 通过传感器自动采集信号或图像","D. 帮助检查错误原因或追踪攻击痕迹"],"answer":"C","explanation":"暂无解析"},
+      {"id":34,"type":"单选题","question":"根据材料，系统日志采集的主要作用不包括以下哪一项？","options":["A. 记录硬件、软件和系统问题信息","B. 监视系统中发生的事件","C. 通过传感器自动采集信号或图像","D. 帮助检查错误原因或追踪攻击痕迹"],"answer":"C","explanation":"暂无解析"},
+      {"id":35,"type":"单选题","question":"关于存储类型和协议，下列哪种存储方式采用扁平化结构，将文件和元数据包装成对象，并通过HTTP直接访问？","options":["A. 文件存储","B. 块存储","C. 对象存储","D. 表存储"],"answer":"C","explanation":"暂无解析"},
+      {"id":36,"type":"判断题","question":"集中式存储只具备纵向扩展（Scale-up）能力，不具备横向扩展（Scale-out）能力。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":37,"type":"单选题","question":"关于数据采集技术的分类，下列哪种方法主要依赖应用程序接口（API）或网络爬虫来实现？","options":["A. 系统日志采集","B. 网络数据采集","C. 设备数据采集","D. 传感器数据采集"],"answer":"B","explanation":"暂无解析"},
+      {"id":38,"type":"单选题","question":"大数据4V特征中，“Variety”指的是？","options":["A. 数据量大","B. 速度快","C. 类型复杂","D. 多变性"],"answer":"C","explanation":"暂无解析"},
+      {"id":39,"type":"判断题","question":"虚拟化技术可以提升IT资源使用效率，降低成本。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":40,"type":"单选题","question":"以下哪种技术用于将一台物理计算机虚拟为多台逻辑计算机？","options":["A. 分布式存储","B. 虚拟化","C. 云网融合","D. 边云协同"],"answer":"B","explanation":"暂无解析"},
+      {"id":41,"type":"单选题","question":"工业互联网平台的核心层级不包括？","options":["A. 边缘层","B. 平台层","C. 应用层","D. 用户层"],"answer":"D","explanation":"暂无解析"},
+      {"id":42,"type":"单选题","question":"下列哪项属于工业互联网平台的“知识积累”特征？","options":["A. 采集设备数据","B. 基于工业模型的数据分析","C. 提供开放的APP开发环境","D. 云计算存储"],"answer":"B","explanation":"暂无解析"},
+      {"id":43,"type":"判断题","question":"IaaS层的核心是数据管理技术。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":44,"type":"单选题","question":"工业互联网平台的边缘层主要功能不包括以下哪一项？","options":["A. 设备接入","B. 协议转换","C. 边缘数据处理","D. 云计算服务"],"answer":"D","explanation":"暂无解析"},
+      {"id":45,"type":"判断题","question":"边缘计算可以完全替代云计算。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":46,"type":"单选题","question":"边缘计算的主要优势是？","options":["A. 海量存储","B. 低时延","C. 低成本","D. 高安全性"],"answer":"B","explanation":"暂无解析"},
+      {"id":47,"type":"判断题","question":"云计算按部署方式分为公有云、私有云、社区云和混合云。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":48,"type":"单选题","question":"以下哪一项不是云计算的特点？","options":["A. 超大规模","B. 高可扩展性","C. 高时延","D. 虚拟化"],"answer":"C","explanation":"暂无解析"},
+      {"id":49,"type":"判断题","question":"OPC UA支持跨平台、跨厂商的数据交换。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":50,"type":"单选题","question":"工业互联网标识解析体系的核心功能是？","options":["A. 加密通信","B. 为物理和虚拟对象分配唯一标识并实现信息查询","C. 提供云计算资源","D. 替代5G"],"answer":"B","explanation":"暂无解析"},
+      {"id":51,"type":"单选题","question":"以下哪个技术用于实现工业设备间的实时、确定性通信？","options":["A. OPC UA","B. TSN","C. Wi-Fi","D. 蓝牙"],"answer":"A","explanation":"暂无解析"},
+      {"id":52,"type":"单选题","question":"以下哪个协议用于将域名解析为IP地址？","options":["A. HTTP","B. DNS","C. ARP","D. SDN"],"answer":"B","explanation":"暂无解析"},
+      {"id":53,"type":"判断题","question":"5G网络的大连接特性使其可以支持千亿级设备连接。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":54,"type":"判断题","question":"SDN的核心思想是将控制平面与转发平面分离。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":55,"type":"单选题","question":"OSI模型中，哪一层负责端到端的可靠通信？","options":["A. 网络层","B. 传输层","C. 应用层","D. 网络接口层"],"answer":"B","explanation":"暂无解析"},
+      {"id":56,"type":"单选题","question":"OSI模型中，哪一层负责端到端的可靠通信？","options":["A. 网络层","B. 传输层","C. 应用层","D. 网络接口层"],"answer":"B","explanation":"暂无解析"},
+      {"id":57,"type":"判断题","question":"5G网络的大连接特性使其可以支持千亿级设备连接。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":58,"type":"判断题","question":"Wi-Fi 6支持多用户MIMO（MU-MIMO）技术。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":59,"type":"单选题","question":"以下哪个技术不属于蜂窝移动通信？","options":["A. 4G","B. Wi-Fi","C. 5G","D. NB-IoT"],"answer":"B","explanation":"暂无解析"},
+      {"id":60,"type":"单选题","question":"蜂窝移动通信采用六边形小区组网的主要目的是？","options":["A. 美观","B. 频率复用和降低终端发射功率","C. 增加基站数量","D. 提高语音质量"],"answer":"B","explanation":"暂无解析"},
+      {"id":61,"type":"单选题","question":"以下哪种技术属于短距离无线通信技术？","options":["A. LoRa","B. SigFox","C. NFC","D. eMTC"],"answer":"C","explanation":"暂无解析"},
+      {"id":62,"type":"单选题","question":"以下哪种无线通信技术适用于低功耗、广覆盖场景？","options":["A. Wi-Fi","B. NB-IoT","C. UWB","D. ZigBee"],"answer":"B","explanation":"暂无解析"},
+      {"id":63,"type":"单选题","question":"以下哪种传输介质抗干扰能力最强？","options":["A. 双绞线","B. 同轴电缆","C. 光纤","D. 明线"],"answer":"C","explanation":"暂无解析"},
+      {"id":64,"type":"判断题","question":"光纤通信中，光信号是通过玻璃包层传播的。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":65,"type":"判断题","question":"同轴电缆的中心是铜芯导线，外面依次是绝缘层、金属屏蔽层和护套。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":66,"type":"单选题","question":"数字通信系统中，负责将模拟信号转换为数字信号的环节是？","options":["A. 信道编码","B. 调制","C. 信源编码","D. 解调"],"answer":"C","explanation":"暂无解析"},
+      {"id":67,"type":"单选题","question":"DCS的全称是______，它以危险分散控制、操作和管理集中为特点，集成了计算机、通讯、显示和控制技术。","options":["A. 分布式控制系统","B. 先进过程控制","C. 可编程逻辑控制器","D. 数控"],"answer":"A","explanation":"暂无解析"},
+      {"id":68,"type":"单选题","question":"可编程逻辑控制器的英文缩写是______，它专为工业环境应用而设计。","options":["A. APC","B. CNC","C. DCS","D. PLC"],"answer":"D","explanation":"暂无解析"},
+      {"id":69,"type":"单选题","question":"PID控制中，P代表______控制，决定系统的响应快速性；I代表______控制，消除累积误差；D代表______控制，具有超前作用。","options":["A. 积分、比例、微分","B. 比例、积分、微分","C. 微分、比例、积分","D. 比例、微分、积分"],"answer":"B","explanation":"暂无解析"},
+      {"id":70,"type":"单选题","question":"关于模型预测控制的描述，错误的是？","options":["A. 对模型误差具有较强的鲁棒性","B. 利用预测模型预测未来偏差值","C. 采用滚动优化确定控制策略","D. 仅利用当前和过去的偏差值"],"answer":"D","explanation":"暂无解析"},
+      {"id":71,"type":"单选题","question":"在下述控制方法中，最简单、最容易实现的是？","options":["A. PID控制","B. 双位控制","C. 鲁棒控制","D. 模型预测控制"],"answer":"B","explanation":"暂无解析"},
+      {"id":72,"type":"简答题","question":"有人将PID控制比喻为：P（比例）代表“现在”，I（积分）代表“过去”，D（微分）代表“未来”。请用生活中的例子解释这个比喻。","options":[],"answer":"可用开车保持车速作例子：P看当前速度与目标速度的差距，差得越多油门或刹车调整越大；I累积过去长期偏差，若一直偏慢就逐步加大修正以消除稳态误差；D根据误差变化趋势提前判断未来，速度变化过快时提前减小调整，防止超调和震荡。","explanation":"暂无解析"},
+      {"id":73,"type":"简答题","question":"请列举3种传感器，说明：1. 它们检测什么物理量？2. 它们可能用在什么地方？3. 它们是如何工作的？","options":[],"answer":"示例：温度传感器检测温度，可用于冰箱、空调，利用热敏电阻阻值随温度变化实现测量；光照传感器检测光强，可用于手机自动亮度调节，利用光敏元件的电阻或电流随光照变化实现测量；压力传感器检测压力，可用于胎压监测或工业管道，利用压阻效应或压电效应把压力变化转换为电信号。","explanation":"暂无解析"},
+      {"id":74,"type":"填空题","question":"流量信号的获取方法包括：利用[填空1]方程由压力获取流速、利用流体中的[填空2]率获取流量、利用[填空3]检测频移进行测量。","options":[],"answer":"伯努利；热耗散；超声波","explanation":"暂无解析"},
+      {"id":75,"type":"填空题","question":"传感器的基本组成包括[填空1]、[填空2]两部分，前者负责[填空3]，后者负责[填空4]。","options":[],"answer":"敏感元件；转换元件；检出信号；转换信号","explanation":"暂无解析"},
+      {"id":76,"type":"判断题","question":"智能传感器不仅具有检测功能，还具有信息处理、逻辑判断和自诊断功能。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":77,"type":"判断题","question":"在实际测量中，绝对的真实值是可以被准确获得的。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":78,"type":"判断题","question":"低通滤波器允许高于特定频率的信号通过，阻断低于该频率的信号。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":79,"type":"判断题","question":"调制的主要目的是为了减少信号在传输过程中受到的干扰。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":80,"type":"简答题","question":"传感器直接获取到的信号，能直接送给电脑、单片机或者显示屏使用吗？为什么？","options":[],"answer":"通常不能直接使用。传感器输出多为微弱、含噪声或非标准的模拟信号，需要经过放大、滤波、线性化、隔离、A/D转换和接口标准化等信号调理后，才能稳定送给电脑、单片机或显示屏处理和显示。","explanation":"暂无解析"},
+      {"id":81,"type":"单选题","question":"关于非接触式温度传感器的描述，正确的是？","options":["A. 敏感元件必须与被测物体接触","B. 利用热胀冷缩原理","C. 可通过光学、声波等方式进行间接测量","D. 只能测量高温物体"],"answer":"C","explanation":"暂无解析"},
+      {"id":82,"type":"单选题","question":"湿度传感器的核心原理是湿敏材料的______随环境湿度变化。","options":["A. 颜色","B. 重量","C. 电阻值或电容量","D. 体积"],"answer":"C","explanation":"暂无解析"},
+      {"id":83,"type":"简答题","question":"同学们身边有哪些传感器？它们是如何工作的？请结合以下场景回答：1. 手机自动亮度调节；2. 自动感应水龙头；3. 智能手表计步/心率监测；4. 楼道声控灯；5. 冰箱/空调的温度控制；6. 商场自动门。","options":[],"answer":"手机自动亮度调节使用光照传感器检测环境光强；自动感应水龙头使用红外或接近传感器检测手部靠近；智能手表用加速度计/陀螺仪计步，用光电容积脉搏波（PPG）检测心率；楼道声控灯用声音传感器检测声压变化；冰箱/空调用温度传感器检测温度并反馈控制；商场自动门用红外、微波或雷达传感器检测人体接近。","explanation":"暂无解析"},
+      {"id":84,"type":"简答题","question":"同学们身边有哪些传感器？它们是如何工作的？请结合以下场景回答：1. 手机自动亮度调节；2. 自动感应水龙头；3. 智能手表计步/心率监测；4. 楼道声控灯；5. 冰箱/空调的温度控制；6. 商场自动门。","options":[],"answer":"手机自动亮度调节使用光照传感器检测环境光强；自动感应水龙头使用红外或接近传感器检测手部靠近；智能手表用加速度计/陀螺仪计步，用光电容积脉搏波（PPG）检测心率；楼道声控灯用声音传感器检测声压变化；冰箱/空调用温度传感器检测温度并反馈控制；商场自动门用红外、微波或雷达传感器检测人体接近。","explanation":"暂无解析"},
+      {"id":85,"type":"单选题","question":"关于关系型数据库和非关系型数据库的描述，不正确的有？","options":["A. 关系型数据库使用二维表格组织数据","B. 非关系型数据库更适合处理高并发、大规模数据","C. 图数据库属于关系型数据库的一种","D. 时序数据库专门用于处理时间序列数据"],"answer":"C","explanation":"暂无解析"},
+      {"id":86,"type":"单选题","question":"用于存储、检索和管理文档类型数据的数据库是哪种类型？","options":["A. 时序数据库","B. 文档数据库","C. 图数据库","D. 实时/历史数据库"],"answer":"B","explanation":"暂无解析"},
+      {"id":87,"type":"判断题","question":"数据库技术的实现包括数据结构、数据库管理系统、数据库设计和数据处理等方面的技术要素。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":88,"type":"简答题","question":"案例分析题：某制造企业需要建立一个生产管理系统，要求实现以下功能：1. 实时采集100台注塑机的温度、压力数据（每秒1次）；2. 记录每台设备的维修历史和维护计划；3. 管理零部件供应商信息和采购订单；4. 查询某个产品所有关键零件的供应商、批次号（用于质量追溯）。请为该企业推荐至少两种数据库类型，并说明理由。","options":[],"answer":"可推荐：时序数据库，用于高频采集和查询温度、压力等带时间戳的设备数据；关系型数据库，用于维护设备档案、维修计划、供应商信息和采购订单等结构化业务数据；图数据库，用于表达产品、零件、供应商、批次之间的复杂关联，便于质量追溯。至少答出其中两类并说明匹配场景即可。","explanation":"暂无解析"},
+      {"id":89,"type":"多选题","question":"关于关系型数据库和非关系型数据库的描述，正确的有？","options":["A. 关系型数据库使用二维表格组织数据","B. 非关系型数据库更适合处理高并发、大规模数据","C. 图数据库属于关系型数据库的一种","D. 时序数据库专门用于处理时间序列数据"],"answer":"ABD","explanation":"暂无解析"},
+      {"id":90,"type":"单选题","question":"在工业场景中，用于存储大量带有时间戳的传感器数据（如温度、压力、振动），最适合的数据库类型是？","options":["A. 关系型数据库","B. 文档数据库","C. 时序数据库","D. 图数据库"],"answer":"C","explanation":"暂无解析"},
+      {"id":91,"type":"填空题","question":"为以下应用场景选择合适的芯片，并说出理由。（MCU、CPU、DSP、GPU、FPGA、MEMS）1. 语音降噪耳机，实时过滤环境噪音并增强人声；2. 工厂MES服务器，处理全厂生产数据并运行ERP系统；3. 智能洗衣机控制板，根据水位、衣物重量自动调节洗涤程序；4. 产品缺陷视觉检测系统，同时处理16路高清相机图像；5. 汽车安全气囊触发传感器，检测碰撞加速度；6. 机器人手臂控制器，客户可根据新工序现场重新编程。","options":[],"answer":"DSP；CPU；MCU；GPU；MEMS；FPGA","explanation":"暂无解析"},
+      {"id":92,"type":"判断题","question":"负责计算的计算机技术与软件技术为数字化技术体系提供了核心承载。","options":[],"answer":"对","explanation":"暂无解析"},
+      {"id":93,"type":"判断题","question":"负责感知的数字传感器是数字化技术体系中的“运动器官”。","options":[],"answer":"错","explanation":"暂无解析"},
+      {"id":94,"type":"单选题","question":"智能制造的核心特征不包括？","options":["A. 自动化生产","B. 人机协作","C. 实时监控","D. 手工操作"],"answer":"D","explanation":"暂无解析"},
+      {"id":95,"type":"单选题","question":"关于HCPS系统叙述有误的是？","options":["A. 由“人-物理”构成的二元系统","B. 由“人-信息-物理”构成的三元系统","C. HCPS是智能制造系统","D. HCPS中的物理系统是完成生产活动的主体"],"answer":"A","explanation":"暂无解析"},
+      {"id":96,"type":"单选题","question":"请选择集成电路制造步骤的正确顺序。","options":["A. 设计、光刻、掺杂、刻蚀、切割、封装","B. 设计、光刻、刻蚀、掺杂、切割、封装","C. 设计、光刻、掺杂、切割、刻蚀、封装","D. 设计、掺杂、光刻、切割、刻蚀、封装"],"answer":"B","explanation":"暂无解析"},
+      {"id":97,"type":"单选题","question":"以下哪一项不属于智能制造的大系统观？","options":["A. 智能生产","B. 智能产品","C. 智能工厂","D. 智能服务"],"answer":"C","explanation":"暂无解析"},
+      {"id":98,"type":"多选题","question":"智能化技术主要组成包括？","options":["A. 大数据智能","B. 跨媒体智能","C. 群体智能","D. 混合增强智能"],"answer":"ABCD","explanation":"暂无解析"}
+    ];
+
+    const STORAGE_KEY = "smart_quiz_records_v1";
+    const $ = (id) => document.getElementById(id);
+
+    const defaultState = () => ({
+      mode: "order",
+      currentIndex: 0,
+      randomIds: [],
+      answers: {},
+      wrongIds: []
+    });
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!parsed || typeof parsed !== "object") return defaultState();
+        return { ...defaultState(), ...parsed };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function shuffle(array) {
+      const next = [...array];
+      for (let i = next.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [next[i], next[j]] = [next[j], next[i]];
+      }
+      return next;
+    }
+
+    function allIds() {
+      return QUESTION_BANK.map((q) => q.id);
+    }
+
+    function activeIds() {
+      if (state.mode === "random") {
+        if (state.randomIds.length !== QUESTION_BANK.length) state.randomIds = shuffle(allIds());
+        return state.randomIds;
+      }
+      if (state.mode === "wrong") return state.wrongIds.filter((id) => QUESTION_BANK.some((q) => q.id === id));
+      return allIds();
+    }
+
+    function currentQuestion() {
+      const ids = activeIds();
+      if (!ids.length) return null;
+      state.currentIndex = Math.max(0, Math.min(state.currentIndex, ids.length - 1));
+      return QUESTION_BANK.find((q) => q.id === ids[state.currentIndex]);
+    }
+
+    function isChoice(q) {
+      return q.options && q.options.length > 0;
+    }
+
+    function isFill(q) {
+      return q.type === "填空题";
+    }
+
+    function normalizeAnswer(value) {
+      return String(value || "")
+        .replace(/[；;、，,\s]/g, "")
+        .replace(/[。\.]/g, "")
+        .toUpperCase();
+    }
+
+    function optionLetter(option) {
+      return option.split(".")[0].trim();
+    }
+
+    function choiceText(option) {
+      return option.replace(/^[A-Z]\.\s*/, "");
+    }
+
+    function markAnswer(question, userAnswer, correct) {
+      state.answers[question.id] = {
+        userAnswer,
+        correct,
+        updatedAt: Date.now()
+      };
+
+      const wrongSet = new Set(state.wrongIds);
+      if (correct) wrongSet.delete(question.id);
+      else wrongSet.add(question.id);
+      state.wrongIds = [...wrongSet].sort((a, b) => a - b);
+      saveState();
+      render();
+    }
+
+    function answerChoice(letter) {
+      const q = currentQuestion();
+      if (!q) return;
+      const correct = normalizeAnswer(letter) === normalizeAnswer(q.answer);
+      markAnswer(q, letter, correct);
+      showToast(correct ? "回答正确" : "回答错误，已加入错题集");
+    }
+
+    function submitFill() {
+      const q = currentQuestion();
+      if (!q) return;
+      const input = $("writtenAnswer");
+      const userAnswer = input ? input.value : "";
+      const correct = normalizeAnswer(userAnswer) === normalizeAnswer(q.answer);
+      markAnswer(q, userAnswer, correct);
+      showToast(correct ? "填空正确" : "填空不完全匹配，已加入错题集");
+    }
+
+    function selfMark(correct) {
+      const q = currentQuestion();
+      if (!q) return;
+      const input = $("writtenAnswer");
+      markAnswer(q, input ? input.value : "", correct);
+      showToast(correct ? "已标记掌握" : "已加入错题集");
+    }
+
+    function switchMode(mode) {
+      state.mode = mode;
+      state.currentIndex = 0;
+      if (mode === "random") state.randomIds = shuffle(allIds());
+      saveState();
+      render();
+    }
+
+    function jumpToQuestion(id) {
+      if (state.mode === "wrong" && !state.wrongIds.includes(id)) state.mode = "order";
+      const ids = activeIds();
+      const index = ids.indexOf(id);
+      if (index >= 0) {
+        state.currentIndex = index;
+      } else {
+        state.mode = "order";
+        state.currentIndex = allIds().indexOf(id);
+      }
+      saveState();
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function move(delta) {
+      const ids = activeIds();
+      if (!ids.length) return;
+      state.currentIndex = (state.currentIndex + delta + ids.length) % ids.length;
+      saveState();
+      render();
+    }
+
+    function render() {
+      renderModeButtons();
+      renderQuestion();
+      renderStats();
+      renderAnswerCard();
+      renderWrongBook();
+      $("shuffleBtn").style.display = state.mode === "random" ? "" : "none";
+    }
+
+    function renderModeButtons() {
+      document.querySelectorAll("[data-mode]").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.mode === state.mode);
+      });
+      const text = state.mode === "order" ? "顺序练习" : state.mode === "random" ? "随机练习" : "错题练习";
+      $("modeText").textContent = text;
+    }
+
+    function renderQuestion() {
+      const q = currentQuestion();
+      const area = $("questionArea");
+      if (!q) {
+        area.innerHTML = `
+          <div class="empty">
+            <strong>错题集为空。</strong><br>
+            可以先做一轮题，答错的题会自动进入这里。
+          </div>
+        `;
+        return;
+      }
+
+      const saved = state.answers[q.id];
+      const answerShown = saved || !isChoice(q);
+      const parts = [
+        `<div class="meta"><span class="pill">${q.type}</span><span class="pill">题号 ${q.id}</span></div>`,
+        `<h2 class="question">${escapeHtml(q.question)}</h2>`
+      ];
+
+      if (isChoice(q)) {
+        parts.push(`<div class="options">`);
+        q.options.forEach((option) => {
+          const letter = optionLetter(option);
+          const isCorrect = normalizeAnswer(q.answer).includes(letter);
+          const chosen = saved && normalizeAnswer(saved.userAnswer).includes(letter);
+          const cls = saved
+            ? isCorrect
+              ? "correct"
+              : chosen
+                ? "wrong"
+                : "dimmed"
+            : "";
+          parts.push(`
+            <button class="option ${cls}" data-letter="${letter}">
+              <span class="label">${letter}</span>
+              <span>${escapeHtml(choiceText(option))}</span>
+            </button>
+          `);
+        });
+        parts.push(`</div>`);
+      } else {
+        const inputValue = saved ? saved.userAnswer || "" : "";
+        parts.push(`
+          <div class="written">
+            ${isFill(q)
+              ? `<input id="writtenAnswer" value="${escapeAttribute(inputValue)}" placeholder="输入答案，多个空用分号隔开">`
+              : `<textarea id="writtenAnswer" placeholder="写下你的要点，再对照答案自评">${escapeHtml(inputValue)}</textarea>`}
+            <div class="answer-actions">
+              ${isFill(q) ? `<button class="primary" id="submitFillBtn">提交判断</button>` : ""}
+              <button id="showAnswerBtn">显示答案</button>
+              <button class="good" id="selfGoodBtn">自评正确</button>
+              <button class="bad" id="selfBadBtn">自评错误</button>
+            </div>
+          </div>
+        `);
+      }
+
+      parts.push(`
+        <section class="explanation ${answerShown ? "show" : ""}" id="explanationBox">
+          <h3>答案与解析</h3>
+          <div><strong>正确答案：</strong>${escapeHtml(q.answer)}</div>
+          <div><strong>解析：</strong>${escapeHtml(q.explanation || "暂无解析")}</div>
+        </section>
+      `);
+
+      area.innerHTML = parts.join("");
+
+      document.querySelectorAll(".option").forEach((btn) => {
+        btn.addEventListener("click", () => answerChoice(btn.dataset.letter));
+      });
+
+      const showAnswerBtn = $("showAnswerBtn");
+      if (showAnswerBtn) showAnswerBtn.addEventListener("click", () => $("explanationBox").classList.add("show"));
+      const submitFillBtn = $("submitFillBtn");
+      if (submitFillBtn) submitFillBtn.addEventListener("click", submitFill);
+      const selfGoodBtn = $("selfGoodBtn");
+      if (selfGoodBtn) selfGoodBtn.addEventListener("click", () => selfMark(true));
+      const selfBadBtn = $("selfBadBtn");
+      if (selfBadBtn) selfBadBtn.addEventListener("click", () => selfMark(false));
+    }
+
+    function renderStats() {
+      const ids = activeIds();
+      const total = ids.length || QUESTION_BANK.length;
+      const index = ids.length ? state.currentIndex + 1 : 0;
+      const answered = Object.values(state.answers);
+      const correct = answered.filter((item) => item.correct).length;
+      const rate = answered.length ? Math.round((correct / answered.length) * 100) : 0;
+
+      $("progressText").textContent = `第 ${index} / ${total}`;
+      $("accuracyText").textContent = `${rate}%`;
+      $("wrongCountText").textContent = String(state.wrongIds.length);
+      $("answeredText").textContent = `已答 ${answered.length}`;
+      $("wrongBookCount").textContent = `${state.wrongIds.length} 题`;
+    }
+
+    function renderAnswerCard() {
+      const current = currentQuestion();
+      $("answerCard").innerHTML = QUESTION_BANK.map((q) => {
+        const saved = state.answers[q.id];
+        const classes = ["card-cell"];
+        if (saved && saved.correct) classes.push("done");
+        if (saved && !saved.correct) classes.push("bad");
+        if (current && current.id === q.id) classes.push("current");
+        return `<button class="${classes.join(" ")}" data-jump="${q.id}">${q.id}</button>`;
+      }).join("");
+      document.querySelectorAll("[data-jump]").forEach((btn) => {
+        btn.addEventListener("click", () => jumpToQuestion(Number(btn.dataset.jump)));
+      });
+    }
+
+    function renderWrongBook() {
+      if (!state.wrongIds.length) {
+        $("wrongList").innerHTML = `<div class="empty">暂无错题。答错后会自动收录，答对后会从错题集中移除。</div>`;
+        return;
+      }
+      $("wrongList").innerHTML = state.wrongIds.map((id) => {
+        const q = QUESTION_BANK.find((item) => item.id === id);
+        return `<button class="wrong-item" data-wrong="${id}">第 ${id} 题 · ${escapeHtml(q ? q.type : "")}<br>${escapeHtml(q ? q.question.slice(0, 42) : "")}</button>`;
+      }).join("");
+      document.querySelectorAll("[data-wrong]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.mode = "wrong";
+          const ids = activeIds();
+          state.currentIndex = Math.max(0, ids.indexOf(Number(btn.dataset.wrong)));
+          saveState();
+          render();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    }
+
+    function clearWrongBook() {
+      if (!state.wrongIds.length) return;
+      if (!confirm("确定清空错题集吗？做题记录会保留。")) return;
+      state.wrongIds = [];
+      if (state.mode === "wrong") {
+        state.mode = "order";
+        state.currentIndex = 0;
+      }
+      saveState();
+      render();
+      showToast("错题集已清空");
+    }
+
+    function resetProgress() {
+      if (!confirm("确定清空全部做题记录和错题集吗？")) return;
+      state = defaultState();
+      saveState();
+      render();
+      showToast("记录已重置");
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 1400);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value).replaceAll("\n", " ");
+    }
+
+    $("modebar").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-mode]");
+      if (button) switchMode(button.dataset.mode);
+    });
+    $("prevBtn").addEventListener("click", () => move(-1));
+    $("nextBtn").addEventListener("click", () => move(1));
+    $("shuffleBtn").addEventListener("click", () => {
+      state.randomIds = shuffle(allIds());
+      state.currentIndex = 0;
+      state.mode = "random";
+      saveState();
+      render();
+      showToast("已重新随机");
+    });
+    $("startWrongBtn").addEventListener("click", () => {
+      if (!state.wrongIds.length) {
+        showToast("错题集还是空的");
+        return;
+      }
+      switchMode("wrong");
+    });
+    $("clearWrongBtn").addEventListener("click", clearWrongBook);
+    $("resetProgressBtn").addEventListener("click", resetProgress);
+
+    render();
+  </script>
+</body>
+</html>
