@@ -25,9 +25,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       min-height: 100vh;
@@ -39,16 +37,8 @@
         linear-gradient(145deg, var(--bg-a), var(--bg-b) 52%, #eef7f4);
     }
 
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-    }
+    button, input, textarea { font: inherit; }
+    button { border: 0; cursor: pointer; }
 
     .app {
       width: min(1180px, calc(100% - 28px));
@@ -72,12 +62,7 @@
       backdrop-filter: blur(18px);
     }
 
-    .brand {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      min-width: 0;
-    }
+    .brand { display: flex; gap: 12px; align-items: center; min-width: 0; }
 
     .mark {
       display: grid;
@@ -90,24 +75,10 @@
       background: linear-gradient(135deg, #2563eb, #14b8a6);
     }
 
-    h1 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: 0;
-    }
+    h1 { margin: 0; font-size: 18px; letter-spacing: 0; }
+    .subline { margin-top: 3px; color: var(--muted); font-size: 13px; }
 
-    .subline {
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .topstats {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-    }
+    .topstats { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 
     .stat {
       min-width: 92px;
@@ -118,15 +89,8 @@
       text-align: center;
     }
 
-    .stat strong {
-      display: block;
-      font-size: 17px;
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .stat strong { display: block; font-size: 17px; }
+    .stat span { color: var(--muted); font-size: 12px; }
 
     .layout {
       display: grid;
@@ -144,9 +108,7 @@
       backdrop-filter: blur(18px);
     }
 
-    .main {
-      overflow: hidden;
-    }
+    .main { overflow: hidden; }
 
     .modebar {
       display: flex;
@@ -156,16 +118,14 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .modebar button,
-    .navrow button,
-    .wrong-actions button,
-    .answer-actions button {
+    .modebar button, .navrow button, .wrong-actions button, .answer-actions button {
       min-height: 38px;
       padding: 8px 12px;
       border-radius: 8px;
       color: var(--text);
       background: rgba(255, 255, 255, 0.72);
       border: 1px solid var(--line);
+      transition: background 0.15s, color 0.15s;
     }
 
     .modebar button.active {
@@ -176,14 +136,16 @@
 
     .question-wrap {
       padding: 24px;
+      /* 优化：增加渐变动画 */
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    
+    .question-wrap.fade {
+      opacity: 0;
+      transform: translateX(10px);
     }
 
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 
     .pill {
       display: inline-flex;
@@ -198,17 +160,8 @@
       font-size: 13px;
     }
 
-    .question {
-      margin: 0 0 22px;
-      font-size: 22px;
-      line-height: 1.62;
-      letter-spacing: 0;
-    }
-
-    .options {
-      display: grid;
-      gap: 10px;
-    }
+    .question { margin: 0 0 22px; font-size: 22px; line-height: 1.62; letter-spacing: 0; }
+    .options { display: grid; gap: 10px; }
 
     .option {
       display: grid;
@@ -222,13 +175,11 @@
       color: var(--text);
       background: var(--panel-strong);
       text-align: left;
-      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
     }
 
-    .option:hover {
-      transform: translateY(-1px);
-      border-color: rgba(37, 99, 235, 0.35);
-    }
+    .option:active { transform: scale(0.98); }
+    .option:hover { border-color: rgba(37, 99, 235, 0.35); }
 
     .option .label {
       display: grid;
@@ -241,37 +192,15 @@
       font-weight: 800;
     }
 
-    .option.correct {
-      border-color: rgba(22, 163, 74, 0.45);
-      background: var(--good-bg);
-    }
+    .option.correct { border-color: rgba(22, 163, 74, 0.45); background: var(--good-bg); }
+    .option.correct .label { color: #fff; background: var(--good); }
+    .option.wrong { border-color: rgba(220, 38, 38, 0.45); background: var(--bad-bg); }
+    .option.wrong .label { color: #fff; background: var(--bad); }
+    .option.dimmed { opacity: 0.62; }
 
-    .option.correct .label {
-      color: #fff;
-      background: var(--good);
-    }
+    .written { display: grid; gap: 12px; }
 
-    .option.wrong {
-      border-color: rgba(220, 38, 38, 0.45);
-      background: var(--bad-bg);
-    }
-
-    .option.wrong .label {
-      color: #fff;
-      background: var(--bad);
-    }
-
-    .option.dimmed {
-      opacity: 0.62;
-    }
-
-    .written {
-      display: grid;
-      gap: 12px;
-    }
-
-    .written textarea,
-    .written input {
+    .written textarea, .written input {
       width: 100%;
       min-height: 96px;
       padding: 12px;
@@ -281,38 +210,18 @@
       outline: none;
       background: rgba(255, 255, 255, 0.88);
       color: var(--text);
+      transition: border-color 0.15s;
     }
+    .written textarea:focus, .written input:focus { border-color: var(--brand); }
+    .written input { min-height: 44px; }
 
-    .written input {
-      min-height: 44px;
-    }
+    .answer-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    .answer-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .answer-actions .primary, .navrow .primary, .wrong-actions .primary {
+      color: #fff; background: var(--brand); border-color: transparent;
     }
-
-    .answer-actions .primary,
-    .navrow .primary,
-    .wrong-actions .primary {
-      color: #fff;
-      background: var(--brand);
-      border-color: transparent;
-    }
-
-    .answer-actions .good {
-      color: #fff;
-      background: var(--good);
-      border-color: transparent;
-    }
-
-    .answer-actions .bad,
-    .wrong-actions .danger {
-      color: #fff;
-      background: var(--bad);
-      border-color: transparent;
-    }
+    .answer-actions .good { color: #fff; background: var(--good); border-color: transparent; }
+    .answer-actions .bad, .wrong-actions .danger { color: #fff; background: var(--bad); border-color: transparent; }
 
     .explanation {
       display: none;
@@ -324,14 +233,10 @@
       line-height: 1.72;
     }
 
-    .explanation.show {
-      display: block;
-    }
+    .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .explanation h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
+    .explanation h3 { margin: 0 0 6px; font-size: 16px; }
 
     .navrow {
       display: flex;
@@ -341,208 +246,68 @@
       padding: 14px 24px 24px;
     }
 
-    .side {
-      display: grid;
-      gap: 14px;
-    }
-
-    .side-section {
-      padding: 14px;
-    }
-
-    .side-title {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .side-title h2 {
-      margin: 0;
-      font-size: 16px;
-    }
+    .side { display: grid; gap: 14px; }
+    .side-section { padding: 14px; }
+    .side-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
+    .side-title h2 { margin: 0; font-size: 16px; }
 
     .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 12px;
-      color: var(--muted);
-      font-size: 12px;
+      display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; color: var(--muted); font-size: 12px;
     }
-
     .legend i {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      margin-right: 4px;
-      vertical-align: -1px;
+      display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px;
     }
 
     .card-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 7px;
-      max-height: 330px;
-      overflow: auto;
-      padding-right: 2px;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; max-height: 330px; overflow: auto; padding-right: 2px;
     }
 
     .card-cell {
-      aspect-ratio: 1;
-      border-radius: 8px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.76);
-      border: 1px solid var(--line);
-      font-size: 12px;
-      font-weight: 700;
+      aspect-ratio: 1; border-radius: 8px; color: var(--muted); background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line); font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
     }
+    .card-cell:active { transform: scale(0.9); }
+    .card-cell.done { color: #166534; background: var(--good-bg); border-color: rgba(22, 163, 74, 0.28); }
+    .card-cell.bad { color: #991b1b; background: var(--bad-bg); border-color: rgba(220, 38, 38, 0.28); }
+    .card-cell.current { color: #fff; background: var(--brand); border-color: transparent; }
 
-    .card-cell.done {
-      color: #166534;
-      background: var(--good-bg);
-      border-color: rgba(22, 163, 74, 0.28);
-    }
-
-    .card-cell.bad {
-      color: #991b1b;
-      background: var(--bad-bg);
-      border-color: rgba(220, 38, 38, 0.28);
-    }
-
-    .card-cell.current {
-      color: #fff;
-      background: var(--brand);
-      border-color: transparent;
-    }
-
-    .wrong-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .wrong-list {
-      display: grid;
-      gap: 8px;
-      max-height: 280px;
-      overflow: auto;
-    }
-
+    .wrong-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .wrong-list { display: grid; gap: 8px; max-height: 280px; overflow: auto; }
     .wrong-item {
-      width: 100%;
-      padding: 9px 10px;
-      border-radius: 8px;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.76);
-      border: 1px solid var(--line);
-      text-align: left;
-      line-height: 1.45;
+      width: 100%; padding: 9px 10px; border-radius: 8px; color: var(--text); background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line); text-align: left; line-height: 1.45; cursor: pointer; transition: border-color 0.15s;
     }
-
-    .empty {
-      color: var(--muted);
-      line-height: 1.7;
-    }
+    .wrong-item:hover { border-color: var(--brand); }
+    .empty { color: var(--muted); line-height: 1.7; }
 
     .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 22px;
-      z-index: 20;
-      transform: translateX(-50%) translateY(20px);
-      padding: 10px 14px;
-      border-radius: 8px;
-      color: #fff;
-      background: rgba(23, 32, 51, 0.88);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      position: fixed; left: 50%; bottom: 22px; z-index: 20; transform: translateX(-50%) translateY(20px);
+      padding: 10px 14px; border-radius: 8px; color: #fff; background: rgba(23, 32, 51, 0.88);
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 900px) {
-      .topbar,
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .topstats {
-        justify-content: stretch;
-      }
-
-      .stat {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .side {
-        order: 2;
-      }
-
-      .question-wrap,
-      .navrow {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .question {
-        font-size: 19px;
-      }
+      .topbar, .layout { grid-template-columns: 1fr; }
+      .topstats { justify-content: stretch; }
+      .stat { flex: 1; min-width: 0; }
+      .side { order: 2; }
+      .question-wrap, .navrow { padding-left: 16px; padding-right: 16px; }
+      .question { font-size: 19px; }
     }
 
     @media (max-width: 520px) {
-      .app {
-        width: min(100% - 18px, 1180px);
-        padding-top: 9px;
-      }
-
-      .topbar {
-        top: 8px;
-      }
-
-      .brand {
-        align-items: flex-start;
-      }
-
-      .mark {
-        width: 38px;
-        height: 38px;
-      }
-
-      .stat strong {
-        font-size: 15px;
-      }
-
-      .modebar {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .modebar button:last-child {
-        grid-column: 1 / -1;
-      }
-
-      .option {
-        grid-template-columns: 36px 1fr;
-        padding: 11px;
-      }
-
-      .option .label {
-        width: 30px;
-        height: 30px;
-      }
-
-      .card-grid {
-        grid-template-columns: repeat(8, 1fr);
-      }
+      .app { width: min(100% - 18px, 1180px); padding-top: 9px; }
+      .topbar { top: 8px; }
+      .brand { align-items: flex-start; }
+      .mark { width: 38px; height: 38px; }
+      .stat strong { font-size: 15px; }
+      .modebar { display: grid; grid-template-columns: 1fr 1fr; }
+      .modebar button:last-child { grid-column: 1 / -1; }
+      .option { grid-template-columns: 36px 1fr; padding: 11px; }
+      .option .label { width: 30px; height: 30px; }
+      .card-grid { grid-template-columns: repeat(8, 1fr); }
     }
   </style>
 </head>
@@ -575,9 +340,9 @@
         <section class="question-wrap" id="questionArea"></section>
 
         <div class="navrow">
-          <button id="prevBtn">上一题</button>
+          <button id="prevBtn" title="快捷键: 左方向键">上一题</button>
           <button id="shuffleBtn">重新随机</button>
-          <button id="nextBtn" class="primary">下一题</button>
+          <button id="nextBtn" class="primary" title="快捷键: 右方向键">下一题</button>
         </div>
       </main>
 
@@ -614,6 +379,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    // 题库数据
     const QUESTION_BANK = [
       {"id":1,"type":"单选题","question":"智能控制相比传统控制的优势是？","options":["A. 只能处理线性系统","B. 能处理复杂非线性系统","C. 不需要数据","D. 能自主学习"],"answer":"B","explanation":"暂无解析"},
       {"id":2,"type":"单选题","question":"智能传感器的关键技术不包括？","options":["A. 芯片技术","B. 网络技术","C. 发电技术","D. 数据处理技术"],"answer":"C","explanation":"暂无解析"},
@@ -715,7 +481,7 @@
       {"id":98,"type":"多选题","question":"智能化技术主要组成包括？","options":["A. 大数据智能","B. 跨媒体智能","C. 群体智能","D. 混合增强智能"],"answer":"ABCD","explanation":"暂无解析"}
     ];
 
-    const STORAGE_KEY = "smart_quiz_records_v1";
+    const STORAGE_KEY = "smart_quiz_records_v2"; // 升级存储 key
     const $ = (id) => document.getElementById(id);
 
     const defaultState = () => ({
@@ -723,7 +489,8 @@
       currentIndex: 0,
       randomIds: [],
       answers: {},
-      wrongIds: []
+      wrongIds: [],
+      tempAnswers: {} // 新增：保存用户填写的未提交草稿
     });
 
     let state = loadState();
@@ -751,9 +518,7 @@
       return next;
     }
 
-    function allIds() {
-      return QUESTION_BANK.map((q) => q.id);
-    }
+    function allIds() { return QUESTION_BANK.map((q) => q.id); }
 
     function activeIds() {
       if (state.mode === "random") {
@@ -771,13 +536,8 @@
       return QUESTION_BANK.find((q) => q.id === ids[state.currentIndex]);
     }
 
-    function isChoice(q) {
-      return q.options && q.options.length > 0;
-    }
-
-    function isFill(q) {
-      return q.type === "填空题";
-    }
+    function isChoice(q) { return q.options && q.options.length > 0; }
+    function isFill(q) { return q.type === "填空题"; }
 
     function normalizeAnswer(value) {
       return String(value || "")
@@ -786,25 +546,19 @@
         .toUpperCase();
     }
 
-    function optionLetter(option) {
-      return option.split(".")[0].trim();
-    }
-
-    function choiceText(option) {
-      return option.replace(/^[A-Z]\.\s*/, "");
-    }
+    function optionLetter(option) { return option.split(".")[0].trim(); }
+    function choiceText(option) { return option.replace(/^[A-Z]\.\s*/, ""); }
 
     function markAnswer(question, userAnswer, correct) {
-      state.answers[question.id] = {
-        userAnswer,
-        correct,
-        updatedAt: Date.now()
-      };
+      state.answers[question.id] = { userAnswer, correct, updatedAt: Date.now() };
+      // 清理对应的草稿
+      delete state.tempAnswers[question.id]; 
 
       const wrongSet = new Set(state.wrongIds);
       if (correct) wrongSet.delete(question.id);
       else wrongSet.add(question.id);
       state.wrongIds = [...wrongSet].sort((a, b) => a - b);
+      
       saveState();
       render();
     }
@@ -835,35 +589,51 @@
       showToast(correct ? "已标记掌握" : "已加入错题集");
     }
 
+    // 提取带平滑过渡的切换渲染函数
+    function renderWithTransition(callback) {
+      const area = $("questionArea");
+      area.classList.add("fade");
+      setTimeout(() => {
+        callback();
+        area.classList.remove("fade");
+      }, 150);
+    }
+
     function switchMode(mode) {
-      state.mode = mode;
-      state.currentIndex = 0;
-      if (mode === "random") state.randomIds = shuffle(allIds());
-      saveState();
-      render();
+      renderWithTransition(() => {
+        state.mode = mode;
+        state.currentIndex = 0;
+        if (mode === "random") state.randomIds = shuffle(allIds());
+        saveState();
+        render();
+      });
     }
 
     function jumpToQuestion(id) {
-      if (state.mode === "wrong" && !state.wrongIds.includes(id)) state.mode = "order";
-      const ids = activeIds();
-      const index = ids.indexOf(id);
-      if (index >= 0) {
-        state.currentIndex = index;
-      } else {
-        state.mode = "order";
-        state.currentIndex = allIds().indexOf(id);
-      }
-      saveState();
-      render();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      renderWithTransition(() => {
+        if (state.mode === "wrong" && !state.wrongIds.includes(id)) state.mode = "order";
+        const ids = activeIds();
+        const index = ids.indexOf(id);
+        if (index >= 0) {
+          state.currentIndex = index;
+        } else {
+          state.mode = "order";
+          state.currentIndex = allIds().indexOf(id);
+        }
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     }
 
     function move(delta) {
-      const ids = activeIds();
-      if (!ids.length) return;
-      state.currentIndex = (state.currentIndex + delta + ids.length) % ids.length;
-      saveState();
-      render();
+      renderWithTransition(() => {
+        const ids = activeIds();
+        if (!ids.length) return;
+        state.currentIndex = (state.currentIndex + delta + ids.length) % ids.length;
+        saveState();
+        render();
+      });
     }
 
     function render() {
@@ -909,13 +679,7 @@
           const letter = optionLetter(option);
           const isCorrect = normalizeAnswer(q.answer).includes(letter);
           const chosen = saved && normalizeAnswer(saved.userAnswer).includes(letter);
-          const cls = saved
-            ? isCorrect
-              ? "correct"
-              : chosen
-                ? "wrong"
-                : "dimmed"
-            : "";
+          const cls = saved ? (isCorrect ? "correct" : chosen ? "wrong" : "dimmed") : "";
           parts.push(`
             <button class="option ${cls}" data-letter="${letter}">
               <span class="label">${letter}</span>
@@ -925,7 +689,8 @@
         });
         parts.push(`</div>`);
       } else {
-        const inputValue = saved ? saved.userAnswer || "" : "";
+        // 读取已保存的答案，或者读取正在填写的草稿
+        const inputValue = saved ? (saved.userAnswer || "") : (state.tempAnswers[q.id] || "");
         parts.push(`
           <div class="written">
             ${isFill(q)
@@ -950,19 +715,6 @@
       `);
 
       area.innerHTML = parts.join("");
-
-      document.querySelectorAll(".option").forEach((btn) => {
-        btn.addEventListener("click", () => answerChoice(btn.dataset.letter));
-      });
-
-      const showAnswerBtn = $("showAnswerBtn");
-      if (showAnswerBtn) showAnswerBtn.addEventListener("click", () => $("explanationBox").classList.add("show"));
-      const submitFillBtn = $("submitFillBtn");
-      if (submitFillBtn) submitFillBtn.addEventListener("click", submitFill);
-      const selfGoodBtn = $("selfGoodBtn");
-      if (selfGoodBtn) selfGoodBtn.addEventListener("click", () => selfMark(true));
-      const selfBadBtn = $("selfBadBtn");
-      if (selfBadBtn) selfBadBtn.addEventListener("click", () => selfMark(false));
     }
 
     function renderStats() {
@@ -990,9 +742,6 @@
         if (current && current.id === q.id) classes.push("current");
         return `<button class="${classes.join(" ")}" data-jump="${q.id}">${q.id}</button>`;
       }).join("");
-      document.querySelectorAll("[data-jump]").forEach((btn) => {
-        btn.addEventListener("click", () => jumpToQuestion(Number(btn.dataset.jump)));
-      });
     }
 
     function renderWrongBook() {
@@ -1004,16 +753,6 @@
         const q = QUESTION_BANK.find((item) => item.id === id);
         return `<button class="wrong-item" data-wrong="${id}">第 ${id} 题 · ${escapeHtml(q ? q.type : "")}<br>${escapeHtml(q ? q.question.slice(0, 42) : "")}</button>`;
       }).join("");
-      document.querySelectorAll("[data-wrong]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          state.mode = "wrong";
-          const ids = activeIds();
-          state.currentIndex = Math.max(0, ids.indexOf(Number(btn.dataset.wrong)));
-          saveState();
-          render();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      });
     }
 
     function clearWrongBook() {
@@ -1046,42 +785,107 @@
     }
 
     function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+      return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
     }
+    function escapeAttribute(value) { return escapeHtml(value).replaceAll("\n", " "); }
 
-    function escapeAttribute(value) {
-      return escapeHtml(value).replaceAll("\n", " ");
-    }
+    /* ===========================
+       以下是基于事件委托的核心绑定逻辑
+       =========================== */
 
-    $("modebar").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-mode]");
-      if (button) switchMode(button.dataset.mode);
-    });
-    $("prevBtn").addEventListener("click", () => move(-1));
-    $("nextBtn").addEventListener("click", () => move(1));
-    $("shuffleBtn").addEventListener("click", () => {
-      state.randomIds = shuffle(allIds());
-      state.currentIndex = 0;
-      state.mode = "random";
-      saveState();
-      render();
-      showToast("已重新随机");
-    });
-    $("startWrongBtn").addEventListener("click", () => {
-      if (!state.wrongIds.length) {
-        showToast("错题集还是空的");
+    // 1. 题干主区域事件委托 (选择答案、展开解析等)
+    $("questionArea").addEventListener("click", (e) => {
+      const optionBtn = e.target.closest(".option");
+      if (optionBtn) {
+        answerChoice(optionBtn.dataset.letter);
         return;
       }
+      if (e.target.id === "showAnswerBtn") $("explanationBox").classList.add("show");
+      if (e.target.id === "submitFillBtn") submitFill();
+      if (e.target.id === "selfGoodBtn") selfMark(true);
+      if (e.target.id === "selfBadBtn") selfMark(false);
+    });
+
+    // 2. 实时保存填空题/简答题草稿
+    $("questionArea").addEventListener("input", (e) => {
+      if (e.target.id === "writtenAnswer") {
+        const q = currentQuestion();
+        if (q) {
+          state.tempAnswers[q.id] = e.target.value;
+          saveState(); // 同步到本地避免刷新丢失
+        }
+      }
+    });
+
+    // 3. 答题卡点击跳转
+    $("answerCard").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-jump]");
+      if (btn) jumpToQuestion(Number(btn.dataset.jump));
+    });
+
+    // 4. 错题集点击跳转
+    $("wrongList").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-wrong]");
+      if (btn) {
+        renderWithTransition(() => {
+          state.mode = "wrong";
+          const ids = activeIds();
+          state.currentIndex = Math.max(0, ids.indexOf(Number(btn.dataset.wrong)));
+          saveState();
+          render();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+    });
+
+    // 常规按钮绑定
+    $("modebar").addEventListener("click", (e) => {
+      const button = e.target.closest("[data-mode]");
+      if (button) switchMode(button.dataset.mode);
+    });
+    
+    $("prevBtn").addEventListener("click", () => move(-1));
+    $("nextBtn").addEventListener("click", () => move(1));
+    
+    $("shuffleBtn").addEventListener("click", () => {
+      renderWithTransition(() => {
+        state.randomIds = shuffle(allIds());
+        state.currentIndex = 0;
+        state.mode = "random";
+        saveState();
+        render();
+        showToast("已重新随机");
+      });
+    });
+
+    $("startWrongBtn").addEventListener("click", () => {
+      if (!state.wrongIds.length) return showToast("错题集还是空的");
       switchMode("wrong");
     });
     $("clearWrongBtn").addEventListener("click", clearWrongBook);
     $("resetProgressBtn").addEventListener("click", resetProgress);
 
+    // 5. 键盘事件支持 (A/B/C/D 选答案，左右方向键切换题目)
+    document.addEventListener("keydown", (e) => {
+      // 避免在输入框里按方向键或打字时触发快捷键
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft") move(-1);
+      if (e.key === "ArrowRight") move(1);
+
+      const q = currentQuestion();
+      // 如果当前是选择题且没答过，支持键盘作答
+      if (q && isChoice(q) && !state.answers[q.id]) {
+        const key = e.key.toUpperCase();
+        if (["A", "B", "C", "D", "E", "F"].includes(key)) {
+          // 确认这道题有这个选项
+          const isValid = q.options.some(opt => optionLetter(opt) === key);
+          if (isValid) answerChoice(key);
+        }
+      }
+    });
+
+    // 初始化渲染
     render();
   </script>
 </body>
