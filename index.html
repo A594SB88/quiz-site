@@ -21,6 +21,7 @@
       --bad-bg: #fee2e2;
       --warn: #d97706;
       --shadow: 0 20px 60px rgba(37, 99, 235, 0.13);
+      --ai-color: #0fac93; /* DeepSeek 经典的青绿色系 */
       color-scheme: light;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
     }
@@ -72,13 +73,13 @@
       border-radius: 8px;
       color: #fff;
       font-weight: 800;
-      background: linear-gradient(135deg, #2563eb, #14b8a6);
+      background: linear-gradient(135deg, #0fac93, #2563eb);
     }
 
     h1 { margin: 0; font-size: 18px; letter-spacing: 0; }
     .subline { margin-top: 3px; color: var(--muted); font-size: 13px; }
 
-    .topstats { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .topstats { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; align-items: center;}
 
     .stat {
       min-width: 92px;
@@ -128,68 +129,36 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    .modebar button.active {
-      color: #fff;
-      background: var(--brand);
-      border-color: transparent;
-    }
+    .modebar button.active { color: #fff; background: var(--brand); border-color: transparent; }
 
     .question-wrap {
       padding: 24px;
-      /* 优化：增加渐变动画 */
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    
-    .question-wrap.fade {
-      opacity: 0;
-      transform: translateX(10px);
-    }
+    .question-wrap.fade { opacity: 0; transform: translateX(10px); }
 
     .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-
     .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-height: 28px;
-      padding: 4px 9px;
-      border-radius: 8px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid var(--line);
-      font-size: 13px;
+      display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 4px 9px;
+      border-radius: 8px; color: var(--muted); background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line); font-size: 13px;
     }
 
     .question { margin: 0 0 22px; font-size: 22px; line-height: 1.62; letter-spacing: 0; }
     .options { display: grid; gap: 10px; }
 
     .option {
-      display: grid;
-      grid-template-columns: 42px 1fr;
-      gap: 12px;
-      align-items: center;
-      width: 100%;
-      padding: 13px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      color: var(--text);
-      background: var(--panel-strong);
-      text-align: left;
+      display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: center;
+      width: 100%; padding: 13px; border: 1px solid var(--line); border-radius: 8px;
+      color: var(--text); background: var(--panel-strong); text-align: left;
       transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
     }
 
     .option:active { transform: scale(0.98); }
     .option:hover { border-color: rgba(37, 99, 235, 0.35); }
-
     .option .label {
-      display: grid;
-      width: 34px;
-      height: 34px;
-      place-items: center;
-      border-radius: 8px;
-      color: var(--brand);
-      background: var(--brand-soft);
-      font-weight: 800;
+      display: grid; width: 34px; height: 34px; place-items: center; border-radius: 8px;
+      color: var(--brand); background: var(--brand-soft); font-weight: 800;
     }
 
     .option.correct { border-color: rgba(22, 163, 74, 0.45); background: var(--good-bg); }
@@ -199,73 +168,43 @@
     .option.dimmed { opacity: 0.62; }
 
     .written { display: grid; gap: 12px; }
-
     .written textarea, .written input {
-      width: 100%;
-      min-height: 96px;
-      padding: 12px;
-      resize: vertical;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      outline: none;
-      background: rgba(255, 255, 255, 0.88);
-      color: var(--text);
+      width: 100%; min-height: 96px; padding: 12px; resize: vertical; border: 1px solid var(--line);
+      border-radius: 8px; outline: none; background: rgba(255, 255, 255, 0.88); color: var(--text);
       transition: border-color 0.15s;
     }
     .written textarea:focus, .written input:focus { border-color: var(--brand); }
     .written input { min-height: 44px; }
 
     .answer-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .answer-actions .primary, .navrow .primary, .wrong-actions .primary {
-      color: #fff; background: var(--brand); border-color: transparent;
-    }
+    .answer-actions .primary, .navrow .primary, .wrong-actions .primary { color: #fff; background: var(--brand); border-color: transparent; }
     .answer-actions .good { color: #fff; background: var(--good); border-color: transparent; }
     .answer-actions .bad, .wrong-actions .danger { color: #fff; background: var(--bad); border-color: transparent; }
+    
+    /* 优化的 DeepSeek 免费免 API 按钮样式 */
+    .answer-actions .ai-btn { color: #fff; background: var(--ai-color); border-color: transparent; font-weight: bold; }
+    .answer-actions .ai-btn:hover { background: #0d9488; }
 
     .explanation {
-      display: none;
-      margin-top: 18px;
-      padding: 16px;
-      border: 1px solid rgba(37, 99, 235, 0.2);
-      border-radius: 8px;
-      background: rgba(239, 246, 255, 0.92);
-      line-height: 1.72;
+      display: none; margin-top: 18px; padding: 16px; border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 8px; background: rgba(239, 246, 255, 0.92); line-height: 1.72;
     }
-
     .explanation.show { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
     .explanation h3 { margin: 0 0 6px; font-size: 16px; }
 
-    .navrow {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 24px 24px;
-    }
-
+    .navrow { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding: 14px 24px 24px; }
     .side { display: grid; gap: 14px; }
     .side-section { padding: 14px; }
     .side-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
     .side-title h2 { margin: 0; font-size: 16px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
 
-    .legend {
-      display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; color: var(--muted); font-size: 12px;
-    }
-    .legend i {
-      display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px;
-    }
-
-    .card-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; max-height: 330px; overflow: auto; padding-right: 2px;
-    }
-
+    .card-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; max-height: 330px; overflow: auto; padding-right: 2px; }
     .card-cell {
       aspect-ratio: 1; border-radius: 8px; color: var(--muted); background: rgba(255, 255, 255, 0.76);
-      border: 1px solid var(--line); font-size: 12px; font-weight: 700; cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      border: 1px solid var(--line); font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s, transform 0.1s;
     }
     .card-cell:active { transform: scale(0.9); }
     .card-cell.done { color: #166534; background: var(--good-bg); border-color: rgba(22, 163, 74, 0.28); }
@@ -294,19 +233,11 @@
       .stat { flex: 1; min-width: 0; }
       .side { order: 2; }
       .question-wrap, .navrow { padding-left: 16px; padding-right: 16px; }
-      .question { font-size: 19px; }
     }
-
     @media (max-width: 520px) {
       .app { width: min(100% - 18px, 1180px); padding-top: 9px; }
-      .topbar { top: 8px; }
-      .brand { align-items: flex-start; }
-      .mark { width: 38px; height: 38px; }
-      .stat strong { font-size: 15px; }
       .modebar { display: grid; grid-template-columns: 1fr 1fr; }
       .modebar button:last-child { grid-column: 1 / -1; }
-      .option { grid-template-columns: 36px 1fr; padding: 11px; }
-      .option .label { width: 30px; height: 30px; }
       .card-grid { grid-template-columns: repeat(8, 1fr); }
     }
   </style>
@@ -315,7 +246,7 @@
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <div class="mark">练</div>
+        <div class="mark">智</div>
         <div>
           <h1>智能刷题</h1>
           <div class="subline" id="modeText">顺序练习</div>
@@ -379,7 +310,33 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // 题库数据
+    /* ========================================================
+       新：免 API 秘钥，一键打包 Prompt 并弹窗直达 DeepSeek 网页端
+       ======================================================== */
+    function summonDeepSeek(questionObj) {
+      // 智能提取题目选项
+      let optionString = "";
+      if (questionObj.options && questionObj.options.length > 0) {
+        optionString = `\n选项：\n${questionObj.options.join("\n")}`;
+      }
+
+      // 构建针对当前题目定制的学术讲题提示词
+      const prompt = `你是一个大学工科教授。请帮我深度解析这道错题。\n\n【题目类型】:${questionObj.type}\n【题目内容】:${questionObj.question}${optionString}\n【正确答案】:${questionObj.answer}\n\n请用通俗易懂的语言，分析为什么这个答案是正确的，避坑指南是什么，并点出它的核心考点。`;
+
+      // 1. 同步复制到系统剪贴板
+      navigator.clipboard.writeText(prompt);
+      
+      // 2. 发出通知
+      showToast("🚀 题目已自动打包复制！请在新窗口中直接 Ctrl+V 粘贴问大模型");
+
+      // 3. 立刻同步弹出 DeepSeek 官方聊天网站（同步执行防止被浏览器当成恶意弹窗拦截）
+      window.open("https://chat.deepseek.com", "_blank");
+    }
+
+
+    /* ========================================================
+       原本稳健的题库数据及基本刷题业务
+       ======================================================== */
     const QUESTION_BANK = [
       {"id":1,"type":"单选题","question":"智能控制相比传统控制的优势是？","options":["A. 只能处理线性系统","B. 能处理复杂非线性系统","C. 不需要数据","D. 能自主学习"],"answer":"B","explanation":"暂无解析"},
       {"id":2,"type":"单选题","question":"智能传感器的关键技术不包括？","options":["A. 芯片技术","B. 网络技术","C. 发电技术","D. 数据处理技术"],"answer":"C","explanation":"暂无解析"},
@@ -468,8 +425,8 @@
       {"id":85,"type":"单选题","question":"关于关系型数据库和非关系型数据库的描述，不正确的有？","options":["A. 关系型数据库使用二维表格组织数据","B. 非关系型数据库更适合处理高并发、大规模数据","C. 图数据库属于关系型数据库的一种","D. 时序数据库专门用于处理时间序列数据"],"answer":"C","explanation":"暂无解析"},
       {"id":86,"type":"单选题","question":"用于存储、检索和管理文档类型数据的数据库是哪种类型？","options":["A. 时序数据库","B. 文档数据库","C. 图数据库","D. 实时/历史数据库"],"answer":"B","explanation":"暂无解析"},
       {"id":87,"type":"判断题","question":"数据库技术的实现包括数据结构、数据库管理系统、数据库设计和数据处理等方面的技术要素。","options":[],"answer":"对","explanation":"暂无解析"},
-      {"id":88,"type":"简答题","question":"案例分析题：某制造企业需要建立一个生产管理系统，要求实现以下功能：1. 实时采集100台注塑机的温度、压力数据（每秒1次）；2. 记录每台设备的维修历史和维护计划；3. 管理零部件供应商信息和采购订单；4. 查询某个产品所有关键零件的供应商、批次号（用于质量追溯）。请为该企业推荐至少两种数据库类型，并说明理由。","options":[],"answer":"可推荐：时序数据库，用于高频采集和查询温度、压力等带时间戳的设备数据；关系型数据库，用于维护设备档案、维修计划、供应商信息和采购订单等结构化业务数据；图数据库，用于表达产品、零件、供应商、批次之间的复杂关联，便于质量追溯。至少答出其中两类并说明匹配场景即可。","explanation":"暂无解析"},
-      {"id":89,"type":"多选题","question":"关于关系型数据库和非关系型数据库的描述，正确的有？","options":["A. 关系型数据库使用二维表格组织数据","B. 非关系型数据库更适合处理高并发、大规模数据","C. 图数据库属于关系型数据库的一种","D. 时序数据库专门用于处理时间序列数据"],"answer":"ABD","explanation":"暂无解析"},
+      {"id":88,"type":"简答题","question":"案例分析题：某制造企业需要建立一个生产管理系统，要求实现以下功能：1. 实时采集100台注塑机的温度、压力数据（每秒1次）；2. 记录每台设备的维修历史和维护计划；3. 管理零部件供应商信息和采购订单；4. 查询某个产品所有关键零件的供应商、批次号（用于质量追溯）。请为该企业推荐至少两种数据库类型，并说明理由。","options":[],"answer":"可推荐：时序数据库，用于高频采集和查询温度、压力等带时间戳之设备数据；关系型数据库，用于维护设备档案、维修计划、供应商信息和采购订单等结构化业务数据；图数据库，用于表达产品、零件、供应商、批次之间的复杂关联，便于质量追溯。至少答出其中两类并说明匹配场景即可。","explanation":"暂无解析"},
+      {"id":89,"type":"多选题","question":"关于关系型数据库 and 非关系型数据库的描述，正确的有？","options":["A. 关系型数据库使用二维表格组织数据","B. 非关系型数据库更适合处理高并发、大规模数据","C. 图数据库属于关系型数据库的一种","D. 时序数据库专门用于处理时间序列数据"],"answer":"ABD","explanation":"暂无解析"},
       {"id":90,"type":"单选题","question":"在工业场景中，用于存储大量带有时间戳的传感器数据（如温度、压力、振动），最适合的数据库类型是？","options":["A. 关系型数据库","B. 文档数据库","C. 时序数据库","D. 图数据库"],"answer":"C","explanation":"暂无解析"},
       {"id":91,"type":"填空题","question":"为以下应用场景选择合适的芯片，并说出理由。（MCU、CPU、DSP、GPU、FPGA、MEMS）1. 语音降噪耳机，实时过滤环境噪音并增强人声；2. 工厂MES服务器，处理全厂生产数据并运行ERP系统；3. 智能洗衣机控制板，根据水位、衣物重量自动调节洗涤程序；4. 产品缺陷视觉检测系统，同时处理16路高清相机图像；5. 汽车安全气囊触发传感器，检测碰撞加速度；6. 机器人手臂控制器，客户可根据新工序现场重新编程。","options":[],"answer":"DSP；CPU；MCU；GPU；MEMS；FPGA","explanation":"暂无解析"},
       {"id":92,"type":"判断题","question":"负责计算的计算机技术与软件技术为数字化技术体系提供了核心承载。","options":[],"answer":"对","explanation":"暂无解析"},
@@ -481,18 +438,12 @@
       {"id":98,"type":"多选题","question":"智能化技术主要组成包括？","options":["A. 大数据智能","B. 跨媒体智能","C. 群体智能","D. 混合增强智能"],"answer":"ABCD","explanation":"暂无解析"}
     ];
 
-    const STORAGE_KEY = "smart_quiz_records_v2"; // 升级存储 key
+    const STORAGE_KEY = "smart_quiz_records_v5";
     const $ = (id) => document.getElementById(id);
 
     const defaultState = () => ({
-      mode: "order",
-      currentIndex: 0,
-      randomIds: [],
-      answers: {},
-      wrongIds: [],
-      tempAnswers: {} // 新增：保存用户填写的未提交草稿
+      mode: "order", currentIndex: 0, randomIds: [], answers: {}, wrongIds: [], tempAnswers: {}
     });
-
     let state = loadState();
 
     function loadState() {
@@ -500,14 +451,9 @@
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (!parsed || typeof parsed !== "object") return defaultState();
         return { ...defaultState(), ...parsed };
-      } catch {
-        return defaultState();
-      }
+      } catch { return defaultState(); }
     }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
     function shuffle(array) {
       const next = [...array];
@@ -519,7 +465,6 @@
     }
 
     function allIds() { return QUESTION_BANK.map((q) => q.id); }
-
     function activeIds() {
       if (state.mode === "random") {
         if (state.randomIds.length !== QUESTION_BANK.length) state.randomIds = shuffle(allIds());
@@ -528,7 +473,6 @@
       if (state.mode === "wrong") return state.wrongIds.filter((id) => QUESTION_BANK.some((q) => q.id === id));
       return allIds();
     }
-
     function currentQuestion() {
       const ids = activeIds();
       if (!ids.length) return null;
@@ -540,25 +484,17 @@
     function isFill(q) { return q.type === "填空题"; }
 
     function normalizeAnswer(value) {
-      return String(value || "")
-        .replace(/[；;、，,\s]/g, "")
-        .replace(/[。\.]/g, "")
-        .toUpperCase();
+      return String(value || "").replace(/[；;、，,\s]/g, "").replace(/[。\.]/g, "").toUpperCase();
     }
-
     function optionLetter(option) { return option.split(".")[0].trim(); }
     function choiceText(option) { return option.replace(/^[A-Z]\.\s*/, ""); }
 
     function markAnswer(question, userAnswer, correct) {
       state.answers[question.id] = { userAnswer, correct, updatedAt: Date.now() };
-      // 清理对应的草稿
       delete state.tempAnswers[question.id]; 
-
       const wrongSet = new Set(state.wrongIds);
-      if (correct) wrongSet.delete(question.id);
-      else wrongSet.add(question.id);
+      if (correct) wrongSet.delete(question.id); else wrongSet.add(question.id);
       state.wrongIds = [...wrongSet].sort((a, b) => a - b);
-      
       saveState();
       render();
     }
@@ -589,23 +525,17 @@
       showToast(correct ? "已标记掌握" : "已加入错题集");
     }
 
-    // 提取带平滑过渡的切换渲染函数
     function renderWithTransition(callback) {
       const area = $("questionArea");
       area.classList.add("fade");
-      setTimeout(() => {
-        callback();
-        area.classList.remove("fade");
-      }, 150);
+      setTimeout(() => { callback(); area.classList.remove("fade"); }, 150);
     }
 
     function switchMode(mode) {
       renderWithTransition(() => {
-        state.mode = mode;
-        state.currentIndex = 0;
+        state.mode = mode; state.currentIndex = 0;
         if (mode === "random") state.randomIds = shuffle(allIds());
-        saveState();
-        render();
+        saveState(); render();
       });
     }
 
@@ -614,15 +544,9 @@
         if (state.mode === "wrong" && !state.wrongIds.includes(id)) state.mode = "order";
         const ids = activeIds();
         const index = ids.indexOf(id);
-        if (index >= 0) {
-          state.currentIndex = index;
-        } else {
-          state.mode = "order";
-          state.currentIndex = allIds().indexOf(id);
-        }
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (index >= 0) { state.currentIndex = index; } 
+        else { state.mode = "order"; state.currentIndex = allIds().indexOf(id); }
+        saveState(); render(); window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
 
@@ -631,38 +555,25 @@
         const ids = activeIds();
         if (!ids.length) return;
         state.currentIndex = (state.currentIndex + delta + ids.length) % ids.length;
-        saveState();
-        render();
+        saveState(); render();
       });
     }
 
     function render() {
-      renderModeButtons();
-      renderQuestion();
-      renderStats();
-      renderAnswerCard();
-      renderWrongBook();
+      renderModeButtons(); renderQuestion(); renderStats(); renderAnswerCard(); renderWrongBook();
       $("shuffleBtn").style.display = state.mode === "random" ? "" : "none";
     }
 
     function renderModeButtons() {
-      document.querySelectorAll("[data-mode]").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.mode === state.mode);
-      });
-      const text = state.mode === "order" ? "顺序练习" : state.mode === "random" ? "随机练习" : "错题练习";
-      $("modeText").textContent = text;
+      document.querySelectorAll("[data-mode]").forEach((btn) => { btn.classList.toggle("active", btn.dataset.mode === state.mode); });
+      $("modeText").textContent = state.mode === "order" ? "顺序练习" : state.mode === "random" ? "随机练习" : "错题练习";
     }
 
     function renderQuestion() {
       const q = currentQuestion();
       const area = $("questionArea");
       if (!q) {
-        area.innerHTML = `
-          <div class="empty">
-            <strong>错题集为空。</strong><br>
-            可以先做一轮题，答错的题会自动进入这里。
-          </div>
-        `;
+        area.innerHTML = `<div class="empty"><strong>错题集为空。</strong><br>可以先做一轮题，答错的题会自动进入这里。</div>`;
         return;
       }
 
@@ -689,7 +600,6 @@
         });
         parts.push(`</div>`);
       } else {
-        // 读取已保存的答案，或者读取正在填写的草稿
         const inputValue = saved ? (saved.userAnswer || "") : (state.tempAnswers[q.id] || "");
         parts.push(`
           <div class="written">
@@ -706,11 +616,15 @@
         `);
       }
 
+      // 下方直接接入无缝跳转按钮
       parts.push(`
         <section class="explanation ${answerShown ? "show" : ""}" id="explanationBox">
-          <h3>答案与解析</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="margin: 0;">答案与解析</h3>
+            <button class="pill ai-btn" id="askAiBtn">🤖 召唤 DeepSeek 讲题</button>
+          </div>
           <div><strong>正确答案：</strong>${escapeHtml(q.answer)}</div>
-          <div><strong>解析：</strong>${escapeHtml(q.explanation || "暂无解析")}</div>
+          <div><strong>原版解析：</strong>${escapeHtml(q.explanation || "暂无解析")}</div>
         </section>
       `);
 
@@ -745,10 +659,7 @@
     }
 
     function renderWrongBook() {
-      if (!state.wrongIds.length) {
-        $("wrongList").innerHTML = `<div class="empty">暂无错题。答错后会自动收录，答对后会从错题集中移除。</div>`;
-        return;
-      }
+      if (!state.wrongIds.length) { $("wrongList").innerHTML = `<div class="empty">暂无错题。答错后会自动收录，答对后会从错题集中移除。</div>`; return; }
       $("wrongList").innerHTML = state.wrongIds.map((id) => {
         const q = QUESTION_BANK.find((item) => item.id === id);
         return `<button class="wrong-item" data-wrong="${id}">第 ${id} 题 · ${escapeHtml(q ? q.type : "")}<br>${escapeHtml(q ? q.question.slice(0, 42) : "")}</button>`;
@@ -759,86 +670,58 @@
       if (!state.wrongIds.length) return;
       if (!confirm("确定清空错题集吗？做题记录会保留。")) return;
       state.wrongIds = [];
-      if (state.mode === "wrong") {
-        state.mode = "order";
-        state.currentIndex = 0;
-      }
-      saveState();
-      render();
-      showToast("错题集已清空");
+      if (state.mode === "wrong") { state.mode = "order"; state.currentIndex = 0; }
+      saveState(); render(); showToast("错题集已清空");
     }
 
     function resetProgress() {
       if (!confirm("确定清空全部做题记录和错题集吗？")) return;
-      state = defaultState();
-      saveState();
-      render();
-      showToast("记录已重置");
+      state = defaultState(); saveState(); render(); showToast("记录已重置");
     }
 
     function showToast(message) {
-      const toast = $("toast");
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toast.classList.remove("show"), 1400);
+      const toast = $("toast"); toast.textContent = message; toast.classList.add("show");
+      clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
-    function escapeHtml(value) {
-      return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
-    }
+    function escapeHtml(value) { return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
     function escapeAttribute(value) { return escapeHtml(value).replaceAll("\n", " "); }
 
-    /* ===========================
-       以下是基于事件委托的核心绑定逻辑
-       =========================== */
-
-    // 1. 题干主区域事件委托 (选择答案、展开解析等)
+    /* 事件绑定与豪华事件委托 */
     $("questionArea").addEventListener("click", (e) => {
       const optionBtn = e.target.closest(".option");
-      if (optionBtn) {
-        answerChoice(optionBtn.dataset.letter);
-        return;
-      }
+      if (optionBtn) { answerChoice(optionBtn.dataset.letter); return; }
       if (e.target.id === "showAnswerBtn") $("explanationBox").classList.add("show");
       if (e.target.id === "submitFillBtn") submitFill();
       if (e.target.id === "selfGoodBtn") selfMark(true);
       if (e.target.id === "selfBadBtn") selfMark(false);
+      // 触发一键讲题逻辑
+      if (e.target.id === "askAiBtn") summonDeepSeek(currentQuestion());
     });
 
-    // 2. 实时保存填空题/简答题草稿
     $("questionArea").addEventListener("input", (e) => {
       if (e.target.id === "writtenAnswer") {
         const q = currentQuestion();
-        if (q) {
-          state.tempAnswers[q.id] = e.target.value;
-          saveState(); // 同步到本地避免刷新丢失
-        }
+        if (q) { state.tempAnswers[q.id] = e.target.value; saveState(); }
       }
     });
 
-    // 3. 答题卡点击跳转
     $("answerCard").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-jump]");
       if (btn) jumpToQuestion(Number(btn.dataset.jump));
     });
 
-    // 4. 错题集点击跳转
     $("wrongList").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-wrong]");
       if (btn) {
         renderWithTransition(() => {
-          state.mode = "wrong";
-          const ids = activeIds();
+          state.mode = "wrong"; const ids = activeIds();
           state.currentIndex = Math.max(0, ids.indexOf(Number(btn.dataset.wrong)));
-          saveState();
-          render();
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          saveState(); render(); window.scrollTo({ top: 0, behavior: "smooth" });
         });
       }
     });
 
-    // 常规按钮绑定
     $("modebar").addEventListener("click", (e) => {
       const button = e.target.closest("[data-mode]");
       if (button) switchMode(button.dataset.mode);
@@ -849,12 +732,8 @@
     
     $("shuffleBtn").addEventListener("click", () => {
       renderWithTransition(() => {
-        state.randomIds = shuffle(allIds());
-        state.currentIndex = 0;
-        state.mode = "random";
-        saveState();
-        render();
-        showToast("已重新随机");
+        state.randomIds = shuffle(allIds()); state.currentIndex = 0; state.mode = "random";
+        saveState(); render(); showToast("已重新随机");
       });
     });
 
@@ -865,27 +744,20 @@
     $("clearWrongBtn").addEventListener("click", clearWrongBook);
     $("resetProgressBtn").addEventListener("click", resetProgress);
 
-    // 5. 键盘事件支持 (A/B/C/D 选答案，左右方向键切换题目)
     document.addEventListener("keydown", (e) => {
-      // 避免在输入框里按方向键或打字时触发快捷键
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
-
       if (e.key === "ArrowLeft") move(-1);
       if (e.key === "ArrowRight") move(1);
-
       const q = currentQuestion();
-      // 如果当前是选择题且没答过，支持键盘作答
       if (q && isChoice(q) && !state.answers[q.id]) {
         const key = e.key.toUpperCase();
         if (["A", "B", "C", "D", "E", "F"].includes(key)) {
-          // 确认这道题有这个选项
           const isValid = q.options.some(opt => optionLetter(opt) === key);
           if (isValid) answerChoice(key);
         }
       }
     });
 
-    // 初始化渲染
     render();
   </script>
 </body>
